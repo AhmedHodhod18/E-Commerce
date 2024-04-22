@@ -6,6 +6,8 @@ const {
     deleteCategoryValidator
 } = require('../utils/validators/categoryValidator')
 
+const AuthService = require('../services/authService')
+
 const { 
     getCategories, 
     createCategory, 
@@ -21,8 +23,12 @@ const router = express.Router();
 // Nested route
 router.use('/:categoryId/subcategories', subCategoriesRoute);
 
-router.route('/').get(getCategories).post(createCategoryValidator, createCategory);
-router.route('/:id').get(getCategoryValidator, getCategory)
+router.route('/')
+.get(getCategories)
+.post(AuthService.protect, createCategoryValidator, createCategory);
+
+router.route('/:id')
+.get(getCategoryValidator, getCategory)
 .put(updateCategoryValidator, updateCategory)
 .delete(deleteCategoryValidator, deleteCategory)
 
